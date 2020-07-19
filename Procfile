@@ -1,1 +1,1 @@
-web: node server.js -p 3000
+web: npm start
