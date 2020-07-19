@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const trainerRouter = require('./routes/trainer');
 const app = express();
-var port = process.env.port || 5000;
+var port = process.env.port || 80;
 
 mongoose.connect('mongodb+srv://quest96_01234:155012345@cluster0.k0u38.mongodb.net/trainerDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
