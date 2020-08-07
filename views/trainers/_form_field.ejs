@@ -1,17 +1,21 @@
 <div class="form-group">
     <label for="nameTrainer">Name Trainer</label>
-    <input required value="<%= trainer.nameTrainer %>" type="text" name="nameTrainer" id="nameTrainer" class="form-control" >
+    <input required value="<%= trainer.nameTrainer %>" type="text" name="nameTrainer" id="nameTrainer"
+        class="form-control">
 
 </div>
 <div class="form-group">
     <label for="Project">Project</label>
-    <textarea name="project" id="project"  class="form-control"><%= trainer.project %></textarea>
+    <textarea name="project" id="project" class="form-control"><%= trainer.project %></textarea>
 
 </div>
 <div class="form-group">
     <label for="Review">Review</label>
-    <textarea name="review" id="review"  class="form-control" required><%= trainer.review %></textarea>
+    <textarea name="review" id="review" class="form-control" required><%= trainer.review %></textarea>
 
 </div>
+
+
+
 <a href="/" class="btn btn-secondary">Cancel</a>
 <button type="submit" class="btn btn-primary">Save</button>

@@ -11,6 +11,9 @@ const trainerSchema = new mongoose.Schema({
     review: {
         type: String,
         require: true
+    },
+    avatar: {
+        type: String
     }
 });
 
