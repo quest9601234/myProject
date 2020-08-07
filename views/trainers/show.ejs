@@ -43,23 +43,16 @@
         <div class="container">
             <h1>Trainer profile</h1>
         </div>
-
-
     </div>
-
-
 
     <!-- Or let Bootstrap automatically handle the layout -->
     <div class="container">
-
         <h1 class="mb-1"><%= trainer.nameTrainer %> </h1>
-        <img src="<%= trainer.avatar %> " alt="Avatar" width="400px" height="400px">
+        <img src="../<%= trainer.avatar %>" alt="Avatar" width="300px" height="300px">
         <div class="text-muted mb-2"><%= trainer.project %></div>
         <div class="text-muted mb-2"><%= trainer.review %></div>
-
         <a href="/" class="btn btn-primary">Home</a>
         <a href="/trainer/edit/<%= trainer.id %> " class="btn btn-success">Edit</a>
-
     </div>
 
 

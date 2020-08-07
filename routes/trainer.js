@@ -1,26 +1,20 @@
 const express = require('express');
+const router = express.Router();
 const Trainer = require('./../models/trainer');
-//const trainer = require('./../models/trainer');
 const multer = require('multer');
 const path = require('path');
+const trainer = require('./../models/trainer');
 
-const router = express.Router();
-
-//set storage engine
 const storage = multer.diskStorage({
-    destination: './public/uploads/',
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
     }
-});
+})
 
-// init upload
-const upload = multer({
-    storage: storage
-
-}).single('avatar');
-
-
+const upload = multer({ storage: storage })
 
 router.get('/new', (req, res) => {
     res.render('trainers/new', { trainer: new Trainer() });
@@ -33,70 +27,41 @@ router.get('/edit/:id', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    //console.log(req.params);
-    //const trainer = "abc";
-    const trainer = await Trainer.findById(req.params.id);
+    const trainer = await Trainer.findById(req.params.id).exec();
     if (trainer == null) {
         return res.redirect('/');
     }
-    res.render('trainers/show', { trainer: trainer });
+    res.render('trainers/show', { trainer });
 
 });
 
-router.post('/', async (req, res, next) => {
-    req.trainer = new Trainer();
-    next();
-}, saveTrainerAndRedirect('new'));
-
-router.post('/upload',  (req, res) => {
-    upload(req , res , (err) => {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.send('test');
-                console.log(req.file);
-            }
-        });
-
+router.post('/', upload.single('avatar'), async (req, res, next) => {
+    let trainer = new Trainer({
+        ...req.body,
+        avatar: req.file ? req.file.originalname : null
+    });
+    try {
+        await trainer.save();
+        res.redirect(`/trainer/${trainer.id}`);
+    } catch (err) {
+        console.log(err);
+    }
 });
 
-router.put('/:id', async (req, res, next) => {
-    req.trainer = await Trainer.findById(req.params.id);
-    next();
-}, saveTrainerAndRedirect('edit'));
+
+router.put('/:id', upload.single('avatar'), async (req, res, next) => {
+    try {
+        await trainer.update({ _id: req.params.id }, { $set: { ...req.body, avatar: req.file && req.file.originalname } }, { upsert: true })
+        res.redirect(`/trainer/${req.params.id}`);
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 
 router.delete('/:id', async (req, res) => {
     await Trainer.findByIdAndDelete(req.params.id);
     res.redirect('/');
 });
-
-function saveTrainerAndRedirect(duong_dan) {
-    return async (req, res) => {
-        let trainer = req.trainer;
-        trainer.nameTrainer = req.body.nameTrainer;
-        trainer.project = req.body.project;
-        trainer.review = req.body.review;
-        // trainer.avatar = req.body.avatar;
-        // upload(req , res , (err) => {
-        //     if(err){
-        //         console.log(err);
-        //     }
-        //     else{
-        //         trainer.avatar = req.file.path;
-        //     }
-        // })
-
-
-        try {
-            trainer = await trainer.save();
-            res.redirect(`/trainer/${trainer.id}`);
-        } catch (e) {
-            console.log(e);
-            res.render(`trainers/${duong_dan}`, { trainer: trainer });
-        }
-    }
-}
 
 module.exports = router;

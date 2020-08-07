@@ -43,7 +43,7 @@
     <div class="container">
         <h1 class="mb-4">Edit Trainer</h1>
 
-        <form action="/trainer/<%= trainer.id %>?_method=PUT" method="POST">
+        <form action="/trainer/<%= trainer.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
             <%- include('_form_field') %>
         </form>
     
